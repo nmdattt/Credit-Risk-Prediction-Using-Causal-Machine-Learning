@@ -1,0 +1,82 @@
+\section{Thesis Overview}
+\noindent
+This chapter provides an overview of the background and motivation of the thesis, including the rationale for choosing the topic, the problems that remain in applying machine learning models to credit risk management today, as well as the objectives, scope and approach. In addition, we introduce the overall structure and the specific research scenarios in order to orient the reader for the chapters that follow.
+
+\subsection{Problem Statement}
+\noindent
+The rapid development of Artificial Intelligence (AI) and Machine Learning has created a major turning point in the financial sector. The shift from traditional linear statistical models (such as Logistic Regression) to complex machine learning algorithms (such as Random Forest, XGBoost or Neural Networks) has substantially improved the accuracy of default prediction. However, the sharp trade-off between predictive performance (accuracy) and the interpretability of black-box models is becoming a serious obstacle.
+
+Under the pressure of strict legal regulations, most notably Article 22 of the General Data Protection Regulation in Europe \cite{european2016gdpr}, financial institutions are required to guarantee the right to explanation for customers with respect to any automated decision that directly affects their financial interests. Merely returning a "Loan rejected" outcome without being able to trace back the underlying cause is no longer acceptable, either legally or operationally.
+
+In addition, traditional machine learning models are essentially correlational models. They learn to recognise patterns from historical data but entirely lack an understanding of the underlying causal structure of that data. When the macroeconomic context changes, these surface-level correlational patterns are easily broken. To address this, many current systems employ post-hoc explainable AI (post-hoc XAI) methods such as LIME \cite{ribeiro2016trust} or SHAP \cite{lundberg2017unified}. Although they can explain the contribution of individual features, these post-hoc tools are in fact merely an outer wrapper: they inadvertently overlook the network of mutual interactions within the original data and readily lead to a breakdown of statistical information.
+
+Against this backdrop, the Causal Machine Learning approach, and in particular the Bayesian Network, emerges as an optimal solution. A Bayesian Network represents knowledge in the form of a directed graph in which the nodes and edges express causal relationships and probabilistic dependencies. This approach offers intrinsic interpretability, directly resolving the trade-off between accuracy and transparency, and creating a solid, safe basis for credit risk appraisal decisions \cite{liu2024credit}.
+
+\subsection{Research Objectives}
+\noindent
+The general objective of this thesis is to thoroughly investigate and apply the Causal Machine Learning framework in order to fundamentally address the lack of transparency in current closed credit risk assessment systems, while maintaining strong classification capability on complex financial data. From this general objective, the thesis aims at the following specific objectives:
+\begin{enumerate}
+    \item \textit{Refining a domain-specific data preprocessing procedure}: Building an automated data pipeline to overcome the class imbalance commonly found in credit data, while also denoising the feature space so as to be compatible with the probabilistic nature of Bayesian networks.
+    \item \textit{Resolving the bottleneck in network structure learning}: Optimising the process of learning a Directed Acyclic Graph (DAG) by combining a local search algorithm with the Bayesian Information Criterion (BIC).
+    \item \textit{Performing causal inference and model interpretation}: Fully exploiting the architecture of the Bayesian network to carry out forward inference, backward inference, and what-if scenario analysis in order to make the entire financial decision flow transparent.
+\end{enumerate}
+
+\subsection{Research Subject and Scope}
+\noindent
+The subject of this thesis is Causal Machine Learning models, specifically the graph structure of Bayesian networks, together with credit profile datasets that are characteristic of the financial sector.
+
+The scope of the research focuses on modelling the structure of the interaction network in order to interpret credit risk. Rather than aiming merely to produce reports of predicted outcomes, the research places its emphasis on building a robust, automated and stable data pipeline for preprocessing information. This pipeline comprises techniques for addressing data imbalance, denoising the feature space, and discretising continuous variables so as to be fully compatible with the probabilistic statistical nature of Bayesian networks. The research is limited to structured, tabular credit data and does not extend to unstructured data types such as contract documents or real-time series data.
+
+\subsection{Main Contributions of the Thesis}
+\noindent
+The core contribution of this thesis does not stop at the successful application of a risk prediction algorithm; more importantly, it lies in realising and optimising an in-depth causal machine learning methodological framework for financial data. Specifically, the research fundamentally resolves the sharp trade-off between classification performance and interpretability by establishing a comprehensive Bayesian network learning procedure. By demonstrating the superiority of the probabilistic graph structure in preserving and making transparent the root-level flows of influence, compared with traditional post-hoc XAI methods (such as LIME and SHAP), the thesis provides a practical solution capable of directly capturing causal logic. The system thereby minimises the breakdown of information and the learning of spurious surface-level correlations, a factor that is vital for any credit appraisal system required to comply with strict legal regulations on algorithmic transparency such as the General Data Protection Regulation (GDPR) \cite{european2016gdpr}.
+
+In practical terms, the research results are transformed into a Business Intelligence tool that acts as a highly reliable risk analysis assistant, helping to personalise the diagnosis of default causes for each individual profile and supporting safe decision-making for credit officers. The thesis further contributes a reference methodology (the five-stage framework: S\_Pro, L\_Pro, K\_Pro, BN\_Pro and In\_Pro) for resolving the bottleneck of enormous computational cost (an NP-hard problem) in learning network structures over imbalanced and complex data spaces. This demonstrates that combining causal graph thinking with the power of machine learning is an inevitable direction for handling densely interconnected business data networks, laying the groundwork for extending and scaling the model to large-scale enterprise-level risk management problems.
+
+\subsection{Overall Structure of the Thesis}
+\noindent
+In order to help the reader move from the general to the specific, the thesis is organised into five main chapters as follows:
+
+\textit{Chapter 1: Thesis Overview}. Presents the background, the rationale for choosing the topic, the objectives, subject and scope of the research, the main contributions, and the research scenarios of the system.
+
+\textit{Chapter 2: Theoretical Background.} Provides foundational knowledge on credit risk, causal machine learning, Bayesian network graph theory, and an assessment of current XAI methods.
+
+\textit{Chapter 3: Proposed Credit Risk Prediction Model Based on Causal Machine Learning.} Presents in detail the architecture of the system, the data preprocessing pipeline (SMOTE, Lasso, K-means), and the algorithms for causal network structure learning and inference.
+
+\textit{Chapter 4: Experiments and Evaluation of Results.} Describes the dataset, the experimental procedure, the analysis of model performance metrics, and an illustration of the interactive BI Dashboard interface.
+
+\textit{Chapter 5: Conclusion.} Summarises the results achieved, analyses the remaining limitations, and proposes directions for further research and development.
+
+\subsection{Research Scenarios of the Credit Risk Assessment System}
+\noindent
+In the credit appraisal process, analysts often face complex questions that go beyond ``Will this customer default or not?'' to ``Why?''. These are not merely isolated operational queries, but demanding practical problems posed to financial AI models. However, because the scenarios arising in practice are extremely diverse, this research does not aim to build a system that knows everything. Instead, we adopt a more pragmatic approach: clearly defining and delimiting the key research scenarios that the system needs to focus on handling.
+
+Each defined scenario directly reflects a core need in the credit risk management process, such as: explaining the reasons for a local application rejection, analysing the sensitivity of financial variables, or identifying the overall risk structure of a customer portfolio. By designing the system specifically to address these case studies rather than merely building a traditional classification model, the thesis ensures the highest transparency and reliability for the resulting decisions. Specifically, Table \ref{tab:tinh_huong_hoi_dap} below presents in detail the research scenarios that have been formulated, thereby clarifying the operational boundaries as well as the core interpretive capabilities of the system.
+
+\begin{table}[htbp]
+\centering
+\caption{List of the formulated scenarios.}
+\label{tab:tinh_huong_hoi_dap}
+\vspace{0.5em}
+\small % Giảm kích thước chữ một chút để bảng gọn gàng hơn
+\begin{tabularx}{\textwidth}{c p{3.2cm} X X}
+\toprule
+\textbf{} & \textbf{Scenario} & \textbf{Business meaning / Input question} & \textbf{Output of the Bayesian network system} \\
+\midrule
+1 & Forward inference & 
+Assessing how the risk probability changes given a particular profile.\newline \newline \textit{``If the customer changes the loan term or the loan amount, how does the probability of default increase or decrease?''} & 
+The system propagates the evidence through the directed graph and recomputes the posterior probability distribution at the target node (Risk level). \\
+\midrule
+2 & Backward inference & 
+Tracing the common characteristics of a group of outcomes. \newline \newline 
+\textit{``For the profiles that have been flagged as defaults, which variables account for the most common causes?''} & 
+Reversing the direction of inference from the Outcome node back to the Feature nodes, allowing the profile of a high-risk customer to be identified. \\
+\midrule
+3 & What-if analysis & 
+Supporting officers in testing new credit-granting scenarios in order to advise customers. \newline\newline 
+\textit{``If customer A settles their existing credit card (reducing outstanding debt), will they qualify for a new loan?''} & 
+By setting a conditional value (an intervention) at a specific node, the model directly quantifies the percentage (\%) change in the approval decision. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+

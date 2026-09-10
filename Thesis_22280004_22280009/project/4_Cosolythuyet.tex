@@ -1,0 +1,219 @@
+\newpage
+\section{Theoretical Background}
+\noindent
+This chapter establishes the theoretical framework underpinning the study and application of Causal Machine Learning to the problem of credit risk prediction. We begin by analysing the nature of credit data together with the shift from traditional statistical methods to complex machine learning models, thereby clarifying the core obstacles of closed systems and the necessity of integrating XAI methods into the risk management process. Next, in order to directly address the conflict between classification performance and transparency, the focus of the research turns to the structure of causal machine learning and the quantitative mathematical foundations of Bayesian networks. The principles of directed acyclic graphs, the Conditional Probability Table (CPT), and the mechanism of probabilistic inference clarified here will serve as the solid logical basis for the entire process of designing, training and interpreting the model in the chapters that follow.
+
+\subsection{Credit Risk Prediction}
+\noindent
+Credit risk prediction is a methodological system established to help financial institutions judge whether or not to grant a loan to a particular individual or organisation. This process typically operates through an in-depth analysis of identity information as well as the transaction and repayment history of the borrower, from which the potential probability of default is computed. In essence, it is the fundamental line of defence in the entire credit cycle, serving to prevent the risk of financial loss before it actually materialises.
+
+Beyond its operational importance, the credit modelling process regularly faces a core mathematical challenge stemming from the very nature of financial data: the phenomenon of class imbalance. In practice, the sample size representing the group of defaulting customers always accounts for a very small proportion compared with the group of ordinary customers who fulfil their financial obligations on time. This structural disparity creates serious obstacles during the training phase of machine learning algorithms. Instead of objectively learning the features that distinguish risk, the system tends to be biased towards the majority class, thereby establishing distorted decision boundaries. Without specialised preprocessing and intervention techniques, the inevitable consequence is that the model will repeatedly produce overly optimistic assessments, inadvertently overlooking profiles that carry latent credit risk.
+
+Fundamentally resolving data imbalance and optimising the predictive model brings substantial value to enterprise-level risk management. An accurate credit assessment system not only supports the efficient allocation of capital but also helps banks strictly comply with capital adequacy regulations. Moreover, when combined with causal analysis methods capable of transparent interpretation, the prediction system moves beyond the limits of an ordinary binary classification tool. Instead, this foundation gives managers deep insight into the core drivers governing default behaviour, laying a solid basis for designing risk mitigation strategies and managing the investment portfolio in a proactive and comprehensive manner.
+
+\subsection{Credit Scoring Models}
+\noindent
+In the modern financial system, credit activity plays a central role in allocating capital among economic agents; however, the process of granting credit always entails a certain degree of uncertainty regarding the borrower's ability to repay. Credit risk is understood as the danger that a borrower will not fully meet their financial obligations as committed, resulting in losses for the lending institution. Building models for default prediction has therefore become an important task in financial risk management.
+
+Credit scoring is regarded as a quantitative system for assessing the creditworthiness of an individual or an enterprise based on characteristics of credit history, demographic information, financial capacity and repayment behaviour. The core objective of credit scoring is to convert a complex set of input information into a probability or a score reflecting the likelihood of an adverse credit event, most commonly the failure to repay debt on time. Liu et al. (2024) \cite{liu2024credit} argue that credit risk prediction models are usually built on the historical data of borrowers in order to determine the probability of default of a new customer, thereby helping financial institutions make appropriate credit-granting decisions.
+
+In essence, credit scoring is a binary or probabilistic classification problem in the field of machine learning, in which the target variable typically represents the state of ``default'' or ``non-default''. Unlike ordinary classification problems, however, credit scoring has its own particular character, since the decisions the model produces directly affect an individual's access to finance and at the same time bear on the stability of the banking system. A predictive model with high accuracy but lacking interpretability may give rise to credit decisions that are difficult to verify; balancing predictive performance against transparency has therefore become an increasingly important requirement in modern credit scoring research \cite{lessmann2015benchmarking}.
+
+Liu et al. (2024) \cite{liu2024credit} divide approaches to credit risk modelling into two main groups: statistical techniques and machine learning methods. This shift reflects the transition from linear models based on statistical assumptions to non-linear models capable of exploiting complex structures in large financial datasets.
+
+\subsubsection{Classical Statistics}
+\noindent
+The earliest studies on bankruptcy and credit risk prediction appeared in the early twentieth century. FitzPatrick (1932) \cite{fitzpatrick1932comparison} is regarded as one of the pioneering scholars in using financial ratios to distinguish bankrupt from non-bankrupt firms. This work laid the foundation for the idea that default behaviour can be explained and predicted through quantitative indicators rather than relying solely on the subjective judgement of credit officers.
+
+For several decades, statistical methods played a foundational role in building credit assessment systems. What the models of this school have in common is that they are based on classical statistical probability theory, on the assumption that the relationship between the input variables and the state of default can be described through determinate mathematical functions.
+
+An important turning point in this period was the Multiple Discriminant Analysis (MDA) model of Altman (1968) \cite{altman1968financial}, which marked a significant shift in the field of credit prediction. Altman's Z-score model seeks an optimal linear combination of financial variables so as to maximise the distance between the bankrupt and the non-bankrupt groups. Mathematically, MDA assumes that data belonging to different groups can be separated by a linear hyperplane:
+
+\begin{equation}
+Z = w_1X_1+w_2X_2+...+w_nX_n,
+\end{equation}
+where $X_i$ are the input financial variables and $w_i$ are the weights optimised so as to form the discriminant function. The resulting value of Z is compared against a determined threshold in order to classify the customer.
+
+Although it achieved high effectiveness in the context of traditional financial data, MDA requires strict assumptions such as multivariate normal distribution, homogeneity of variance across groups, and a linear relationship between the input variables and the target variable. To overcome these limitations, Ohlson (1980) \cite{ohlson1980financial} proposed the Logistic Regression model, which quickly became one of the most widely used methods in the financial industry thanks to its ability to model the probability of a binary event.
+
+Unlike MDA, Logistic Regression does not require the data to follow a normal distribution and does not directly predict the class label; instead, it estimates the probability through the sigmoid function:
+
+\begin{equation}
+P(Y=1|X) = \frac{1}{1 + \exp ({-\left(\beta_0 + \sum_{i=1}^{n}\beta_i x_i\right))}},
+\end{equation}
+where:
+\begin{itemize}
+    \item $P(Y=1|X)$: The probability that the customer falls into the state of default, conditional on the input feature set $X$.
+    \item $e$: The base of the natural logarithm.
+    \item $\beta_0$: The intercept of the model.
+    \item $\beta_i$: The weight (regression coefficient) corresponding to the $i$-th feature, expressing the degree of linear influence of that variable.
+    \item $x_i$: The value of the $i$-th feature in the borrower's credit profile.
+    \item $n$: The total number of features (independent variables) considered.
+\end{itemize}
+\vspace{1em}
+
+The Logistic model quickly became the gold standard in academic research and in practical banking applications thanks to its simplicity, stability and high interpretability. In practice, Logistic Regression to this day remains the reference model in internal credit rating systems under the Basel II and Basel III standards \cite{basel2006international}.
+
+Nevertheless, these statistical methods have inherent drawbacks, being constrained by strict assumptions about the data distribution and relying mainly on a mechanism of linear fitting. In the modern data environment, credit behaviour is often affected simultaneously by many non-linearly interacting factors such as transaction history, consumption behaviour, social network data, cash flow over time and demographic characteristics. Traditional statistical models are hardly capable of learning these complex relationships \cite{lessmann2015benchmarking}.
+
+Consequently, although it retains an important role in systems requiring high interpretability, the statistical school increasingly reveals its limits in terms of data representation capacity and predictive performance.
+
+\subsubsection{Individual Machine Learning Models}
+\noindent
+The success of the Z-Score model created the academic foundation for the entire modern credit scoring industry. However, the development of Big Data, financial technology (FinTech), peer-to-peer lending (P2P Lending), digital banking and e-commerce has given rise to datasets that are increasingly complex, high-dimensional and non-linear in structure. Together with the rapid development of artificial intelligence, this has produced a fundamental shift in the field of credit prediction. Instead of constructing mathematical functions based on statistical assumptions, machine learning algorithms allow the system to learn latent rules from the data automatically. This has driven the transition from traditional statistical models to machine learning and artificial intelligence methods \cite{hand1997statistical}.
+
+One of the first algorithms to be widely applied is the Support Vector Machine (SVM) developed by Vapnik \cite{vapnik1998statistical}. The advantage of SVM lies in its ability to construct an optimal separating hyperplane in a high-dimensional feature space through the kernel trick, maximising the distance to the data points closest to the boundary. Shen et al. (2022) \cite{shen2022credit} developed a Semi-Supervised SVM model for credit prediction, exploiting both labelled and unlabelled data in order to improve predictive effectiveness.
+
+The basic optimisation objective of SVM is:
+$$min \frac{1}{2}\|w\|^2$$
+subject to: $\quad \quad\quad y_i(w^T x_i + b) \geq 1$
+\vspace{1em}
+\noindent
+where \(w\) is the normal vector of the hyperplane and \(b\) is the bias.
+Optimising the margin gives SVM a strong capacity to generalise to unobserved data.
+
+In parallel, models based on decision trees have also proved highly effective. Random Forest, proposed by Breiman (2001) \cite{breiman2001random}, operates on the principles of bagging and random feature selection. Ye et al. (2018) \cite{ye2018loan} applied Random Forest to Lending Club data and recorded predictive performance superior to that of traditional Logistic Regression.
+
+In the field of Deep Learning, studies have begun to exploit the ability of neural networks to learn feature representations automatically. Fonseca et al. (2020) \cite{fonseca2020credit} built a Two-Stage Fuzzy Neural Network model to handle uncertainty in credit data in Brazil. Zhou et al. (2020) \cite{zhou2020credit} developed a CNN model for the credit scoring problem and achieved performance considerably higher than that of traditional models.
+
+Although individual machine learning models substantially improve predictive accuracy, they still have a number of limitations. Each algorithm typically exploits only certain aspects of the data effectively. For example, SVM works well on small datasets but encounters difficulties when scaled up; neural networks have a strong capacity to learn non-linear relationships but are prone to overfitting; decision trees are easy to interpret but lack stability. This has led to the emergence of the hybrid and ensemble learning school.
+
+
+\subsubsection{Ensemble Models}
+\noindent
+Although individual machine learning algorithms have brought considerable progress, each method still has certain limitations in terms of generalisation capability or susceptibility to overfitting on noisy data. To overcome these barriers, researchers have integrated multiple artificial intelligence algorithms in order to build ensemble models \cite{liu2024credit}. This combination is typically carried out through a strategy of using one model to optimise the parameters of another method, or of aggregating the predictions of several different classifiers to create a new algorithm that is more powerful and more stable.
+
+In general, ensemble models are usually represented as a weighted sum of the base models:
+\begin{equation}
+F(x) = \sum_{k=1}^{K} w_k f_k(x)
+\end{equation}
+
+\noindent where:
+\begin{itemize}
+    \item $F(x)$: The final predicted output (the probability or the default label) of the ensemble system.
+    \item $K$: The total number of base classifiers used.
+    \item $w_k$: The contribution weight of the $k$-th base model, usually optimised according to the reliability or the performance of each component model on the dataset.
+    \item $f_k(x)$: The independent prediction of the $k$-th base model for the input feature set $x$.
+\end{itemize}
+
+In practical research on credit risk prediction, the superiority of ensemble learning has been demonstrated through a wide variety of hybrid architectures. With regard to integrating deep learning algorithms with classical machine learning, Huang and Yen (2019) \cite{huang2019performance} successfully combined Deep Belief Networks with SVM, producing predictions markedly more accurate than those obtained from individual classifiers alone such as SVM or the Deep Boltzmann Machine. Following a different approach aimed at optimising deep learning architectures, regularisation techniques can be improved by simultaneously applying $L_1$ constraints to a single $L_2$ regularisation scheme. This refinement considerably improves the structure of the neural network and delivers superior effectiveness when handling the problem of corporate credit risk prediction in high-dimensional data spaces \cite{yang2023deep}. In addition, merging ensemble machine learning methods with probabilistic theoretical foundations has also opened up a number of breakthrough directions. A representative example is the combination of the Random Forest algorithm with evidence theory through the Dempster--Shafer (D--S) rule of combination, which has delivered predictive performance considerably higher than that of the original algorithms as well as of traditional risk assessment models \cite{zhu2022optimization}.
+
+In particular, ensemble learning has attracted great attention thanks to its good generalisation and excellent classification performance in the field of credit risk assessment, most notably the families of tree-based ensembles such as Random Forest and Gradient Boosting \cite{rao2020stage}, \cite{zhou2021credit}. However, although risk assessment performance is improved, the increased complexity of the ensemble structure aggravates the problem of opacity and lack of transparency. Sacrificing intrinsic interpretability in exchange for accuracy poses a major challenge in the practice of financial risk management, where explaining why a customer has been refused a loan becomes extremely difficult. This is precisely the driving force behind the emergence of Explainable Artificial Intelligence (XAI) and Causal Machine Learning \cite{liu2024credit}.
+
+\subsection{Interpretability in XAI}
+\subsubsection{The Emergence of XAI Methods}
+\noindent
+Along with the rapid development of financial technology and the growth of data-driven decision-making, the interpretability of credit risk assessment models has become a core and urgent research topic in the modern financial field. In recent years, the emergence of Explainable Artificial Intelligence methods, aimed at improving the transparency, comprehensibility and trustworthiness of intelligent systems, has reshaped the approach to risk management.
+\noindent
+The emergence of XAI methods has been strongly driven by the following three core factors:
+\begin{enumerate}
+    \item \textit{The conflict between performance and transparency:} The development of machine learning has produced complex ensemble models and deep neural networks with outstanding accuracy. However, these architectures operate as black-box models, making it impossible for humans to directly observe or understand the processing logic inside them. The consequence is that one must confront a trade-off between accuracy and interpretability. This trade-off has prompted the need to develop new techniques in order to narrow the gap between predictive capability and the ability to understand the model.
+    
+    \item \textit{Pressure from legal regulations:} As algorithmic applications become ever more pervasive, international legal safeguards have been established to protect consumer rights. A prime example is the General Data Protection Regulation (GDPR) issued by the European Union, which clearly stipulates the customer's right to explanation with respect to fully automated decisions made by AI. This obliges lending institutions to make the decision logic of personal credit algorithms transparent.
+    
+    \item \textit{Practical requirements in risk management and bias prevention:} A model with high accuracy but lacking interpretability harbours substantial systemic risk, since the soundness of its predictions cannot be verified. A lack of transparency prevents managers from detecting confounding variables or discriminatory data (such as gender, ethnicity or income). XAI has therefore emerged as an indispensable tool for monitoring sensitive data, ensuring fairness and building trust among financial institutions, borrowers and regulatory authorities.
+\end{enumerate}
+Overall, XAI methods are not merely technical post-hoc tools; they have become a strategic component of credit risk prediction systems, fully serving both the goal of profit optimisation and that of compliance with technology ethics \cite{liu2024credit}.
+
+
+\subsubsection{Classification of XAI Methods and Techniques}
+\noindent
+In order to systematise the approaches to making models transparent, the research community generally classifies XAI techniques according to the point at which the explanation is generated relative to the life cycle of the original model. In essence, these methods can be divided into two main streams: intrinsic interpretability and post-hoc interpretability.
+
+
+\vspace{1em}
+\noindent
+\textbf{Intrinsically Interpretable Models}
+
+Intrinsic XAI refers to the group of algorithms designed from the outset with a simple and transparent architecture, allowing users to directly understand the learning mechanism and the internal decision logic without the need for any auxiliary tool. This transparency is achieved mainly by limiting the complexity of the algorithm, whereby the relationships between the input variables and the output are represented clearly through mathematical coefficients or a system of branching rules.
+
+Representative examples of this approach include linear regression, decision trees and, in particular, Bayesian networks. The essence of a Bayesian network lies in its use of a directed acyclic graph and Conditional Probability Tables to visually express the causal flows of influence within the data, thereby helping to isolate the root causes of risk \cite{liu2024credit}. Although this approach provides an absolutely accurate explanation of what the algorithm actually computes, traditional intrinsic models are often limited in their learning capacity. Specifically, when having to process a dataset $D$ that is non-linear and complex, their predictive performance is usually considerably lower than that of modern machine learning models.
+
+\vspace{1em}
+\noindent
+\textbf{Post-hoc Interpretation Techniques}
+
+In order to address the problem of optimising accuracy over $n$ observed samples when applying complex black-box models, a second stream of approaches known as post-hoc interpretability has been adopted. Post-hoc XAI techniques must be used to explain the results after the model has completed training and produced its predictions. The salient characteristic of these techniques is their independence from the internal structure of the original model (model-agnostic). They treat the machine learning algorithm as a latent function and attempt to approximate or analyse its behaviour from the outside by perturbing the input data and observing the resulting changes in the output.
+
+From a mathematical standpoint, many prominent post-hoc XAI algorithms (typically LIME or SHAP) approach explanation through the additive feature attribution method. This local approximation method is expressed in general form by the formula:
+
+\begin{equation}
+g(z') = \phi_0 + \sum_{j=1}^{M} \phi_j z'_j
+\end{equation}
+
+\noindent
+where:
+\begin{itemize}
+    \item[-] $g(z')$: The linear \textit{explanation model}, used to approximate the local behaviour of the original black-box model around the data point under consideration.
+    \item[-] $M$: The total number of \textit{features} introduced into the explanation space.
+    \item[-] $\phi_0$: The \textit{base value} of the prediction, usually the expected value of the model when no feature exerts any influence.
+    \item[-] $\phi_j$: The weight (degree of contribution) of the $j$-th feature to the difference between the current prediction and the base value.
+    \item[-] $z'_j$: A binary state variable taking the value $1$ if the $j$-th feature is present and $0$ if it is withheld.
+\end{itemize}
+
+\vspace{0.8em}
+Although post-hoc XAI partly removes the barriers posed by complex algorithms, it still has a major limitation in that it provides only approximate results rather than reflecting the mechanism of the original model with complete fidelity. Moreover, these methods mainly exploit surface-level statistical correlations instead of identifying the genuine causal mechanism leading to a credit default event \cite{liu2024credit}.
+
+In the context of the credit risk problem, the over-reliance on closed models combined with post-hoc XAI still fails to fundamentally resolve the trade-off between accuracy and interpretability. The limitations of post-hoc XAI in terms of causal reasoning are precisely what motivate the move towards a more powerful methodological framework: incorporating non-linear predictive capability into structures with high intrinsic interpretability through causal machine learning techniques. In the study by Liu, Zhang and Xiong (2024) \cite{liu2024credit}, the causal Bayesian network is proposed as a complete causal machine learning framework for the credit risk prediction problem, comprising five successive stages: S\_Pro, L\_Pro, K\_Pro, BN\_Pro and In\_Pro.
+
+
+\subsection{Overview of Causal Machine Learning}
+
+\subsubsection{Definition and Basic Properties}
+\noindent
+Throughout many decades of development in data science and machine learning, most predictive models have been built on the basis of detecting correlational patterns between input and output variables. From Logistic regression, decision trees and Random Forest to modern deep learning architectures, the central objective of these algorithms is to optimise predictive capability by exploiting the statistical patterns present in historical data \cite{lessmann2015benchmarking}, \cite{vapnik1998statistical}, \cite{breiman2001random}, \cite{friedman2001greedy}. This approach has brought major achievements in many fields, particularly in credit risk prediction, where machine learning models are able to detect complex behavioural patterns that traditional statistical methods struggle to identify \cite{lessmann2015benchmarking}.
+
+However, the success of traditional machine learning has simultaneously revealed a fundamental limitation: models may predict accurately yet cannot explain the true cause of that prediction. In other words, classical machine learning algorithms mainly learn positive or negative associations between variables, but have no capacity to distinguish what is a cause from what is merely an effect or a co-occurring variable \cite{pearl2009causality}. A model may detect that customers with low incomes are frequently accompanied by a high probability of default, but it cannot answer whether increasing a customer's income would genuinely reduce that probability. This is precisely the boundary between correlational inference and causal inference.
+
+The theoretical foundation for this shift was laid by Judea Pearl, who is regarded as the father of modern causal theory. In his classic work \textit{Causality: Models, Reasoning and Inference}, Pearl (2009) \cite{pearl2009causality} argues that data science cannot stop at the question of ``what occurs together'' but must move on to answer the question of ``what causes what''. This perspective opened up an entirely new line of research known as causal machine learning, in which the objective is not only to predict but also to discover, quantify and verify the cause--effect relationships existing within the data. This epoch-making shift helps AI systems escape their dependence on the assumption of an unchanging data distribution (the i.i.d. assumption), which is frequently violated in economic practice owing to temporal drift or macroeconomic shocks. It thereby opens the way to building predictive models that combine near-optimal accuracy with robust intrinsic interpretability \cite{sigrist2019grabit}, \cite{liu2024credit}, \cite{scholkopf2021causal}.
+
+The emergence of Causal Machine Learning has also arisen from the practical needs of high-risk fields such as finance, healthcare, insurance and public administration. In these fields, a wrong decision not only causes economic damage but also leads to serious legal and ethical consequences. Modern regulations such as the European Union's GDPR require artificial intelligence systems to be able to explain the basis on which automated decisions are formed \cite{european2016gdpr}. This makes purely correlation-based black-box models increasingly challenging to deploy in practice.
+
+
+\subsubsection{From Correlation-Based Machine Learning to Causation-Based Machine Learning}
+\noindent
+In traditional statistics, correlation reflects the degree to which two variables change together. If two variables frequently appear together, the model treats this as a data pattern with predictive value. However, the existence of a correlation does not mean that a cause--effect relationship exists. This is the well-known principle that ``correlation does not imply causation'', widely acknowledged in modern statistics \cite{pearl2009causality}, \cite{spirtes2000causation}.
+
+For example, in the financial domain, historical data may show that customers holding many credit cards tend to have a higher default rate (as presented in Table \ref{tab:dataset_summary} and Figure \ref{fig:class_imbalance}). This does not mean, however, that opening additional credit cards is the cause of default. The real cause may stem from the level of latent financial pressure or from poor cash-flow management. Relying on correlation alone, a model may arrive at misleading conclusions and lead to inaccurate credit decisions.
+
+The core foundation separating causal machine learning from classical statistical and machine learning algorithms lies in how the relationship between correlation and causation is defined and handled. Traditional machine learning models optimise an objective function based on the ordinary conditional probability $P(Y|X)$, that is, they search for statistically co-occurring patterns between the input features $X$ and the target variable $Y$ [8, 10].
+
+The limitation of this approach is its particular sensitivity to confounders and selection bias, which makes it easy for the algorithm to learn and exploit spurious correlations in producing its predictions [26, 30]. In the field of credit scoring, a correlation-based model may assess an individual as low-risk merely because they possess attributes commonly associated with the group of safe borrowers; yet this correlation may be entirely broken when the boundary conditions of the economy change, causing the credit score to lose its actual predictive value \cite{stiglitz1981credit}, \cite{hand1997statistical}, \cite{liu2024credit}.
+
+To overcome this limitation, Pearl (2009) argues that data science needs to move through three levels of inference \cite{pearl2009causality}:
+\begin{itemize}
+    \item \textit{The first level (Association)} is the level of observation, answering the question: ``What is happening?''. This is the level of most current Machine Learning models.
+    \item \textit{The second level (Intervention)} answers the question: ``What will happen if we actively change a variable?''. This is precisely the foundation of what-if analysis and intervention policies.
+    \item \textit{The third level (Counterfactual)} answers the question: ``What would have happened if we had acted differently in the past?''. This is the highest level of inference in causal artificial intelligence.
+\end{itemize}
+
+While ordinary machine learning models are locked at the first level, where the question stops at ``If we observe the event $X$, what will happen to $Y$?'', Causal ML allows the mathematical system to rise to the second and third levels by using do-calculus to answer questions such as ``If we actively intervene to change $X$, how will the outcome $Y$ vary?'' \cite{pearl2009causality}, \cite{peters2017elements}. By shifting from computing the observational probability $P(Y|X)$ to the interventional probability $P(Y|do(X))$, causal machine learning isolates the true structure of influence of each variable, helping to clearly distinguish variables bearing a direct causal relationship to default behaviour from those that are merely superficially correlated \cite{liu2024credit}, \cite{bueff2022counterfactual}. This enables financial institutions not merely to look at an opaque predictive score but to genuinely understand the nature of what creates the risk in each customer profile \cite{basel2006international}, \cite{liu2024credit}.
+
+\subsubsection{The Structure of Causal Machine Learning}
+\noindent
+ Causal machine learning is a combination of three major scientific fields: causal statistics, machine learning and probabilistic graphical models \cite{pearl2009causality}, \cite{koller2009probabilistic}.
+ 
+The process of building a causal machine learning system usually begins with identifying the variables under study and constructing a causal graph. This graph represents the hypotheses about the causal relationships among the variables. Each node stands for a variable and each directed edge expresses the causal influence from the cause variable to the effect variable \cite{pearl2009causality}, \cite{spirtes2000causation}. After the DAG has been constructed, the next step is to identify confounders, mediators and colliders. This is a particularly important stage, since mishandling these types of variables can introduce serious bias into causal inference \cite{spirtes2000causation}.
+Next, the system carries out Structure Learning and Parameter Learning. In modern research, the DAG structure can be discovered automatically through algorithms such as the PC Algorithm, Hill Climbing Search, Tabu Search or Max-Min Hill Climbing (MMHC) \cite{koller2009probabilistic}, \cite{jensen2007bayesian}, \cite{spirtes2000causation}.The model then estimates the conditional probability of each node in the network. For BNs, this process typically uses Maximum Likelihood Estimation (MLE) or Bayesian Estimation \cite{darwiche2009modeling}, \cite{jensen2007bayesian}.
+The final stage is causal inference. This is the step that converts historical data into knowledge capable of supporting decision-making. Common techniques include Pearl's do-calculus \cite{pearl2009causality}, Bayesian probabilistic inference \cite{darwiche2009modeling}, Sensitivity Analysis \cite{kamal2021sensitivity}, What-if Analysis \cite{liu2024credit}, \cite{kamal2021sensitivity} and Counterfactual Analysis \cite{bueff2022counterfactual}.
+
+\subsection{Bayesian Networks}
+\noindent
+Post-hoc interpretability through popular tools such as LIME \cite{ribeiro2016trust} or SHAP \cite{lundberg2017unified} is in fact merely a method of locally approximating the behaviour of a complex model, rather than accurately reflecting the operating mechanism of the real world. These methods typically introduce small perturbations at the input in order to measure the change in the output of the closed model, which creates a risk of misleading interpretation if the model itself has learned faulty correlations or has been seriously affected by multicollinearity among the economic variables \cite{lessmann2015benchmarking}, \cite{florez2015enhancing}. Conversely, the interpretive mechanism of causal machine learning, particularly when combined with the Bayesian network structure, is a form of intrinsic, self-contained interpretation that is entirely transparent by virtue of its structure \cite{koller2009probabilistic}, \cite{darwiche2009modeling}. The cause--effect relationships are made explicit through a directed acyclic graph, in which each node represents an economic variable and each directed arrow expresses a direct causal influence \cite{jensen2007bayesian}, \cite{liu2024credit}.
+
+The Bayesian network, also known as the belief network, represents a revolutionary advance in extending and applying Bayesian statistical methods to multidimensional data spaces. From a mathematical standpoint, it is one of the most compelling and internally coherent theoretical models for representing and inferring uncertain knowledge \cite{pearl2009causality}. The core architecture of a Bayesian network is built on a directed acyclic graph in which each node represents a random variable, and the directed edges serve to depict directly the conditional dependencies among the variables \cite{koller2009probabilistic}, \cite{jensen2007bayesian}.
+
+What gives Bayesian networks their outstanding power compared with traditional statistical methods is the ability to construct a joint probability distribution for the entire multivariate system through the chain rule of probability. This mechanism provides an extremely rigorous mathematical framework for quantifying the uncertainty of both the input data and the model structure, while also conferring an outstanding natural advantage in interpretability \cite{darwiche2009modeling}, \cite{spirtes2000causation}. Unlike traditional closed algorithms, which are confined to the first rung of the causal ladder (assessing only surface-level statistical correlation), the Bayesian network model has a structure focused on modelling the mechanism by which uncertainty in the data arises. By profoundly fusing graph theory with probability space, Bayesian networks provide logical, transparent and thoroughly causal interpretations of every interaction and intersection among economic or social variables \cite{scholkopf2021causal}, \cite{peters2017elements}.
+
+Precisely because of this capacity to quantify uncertainty together with its excellent intrinsic transparency, the Bayesian network has risen to become a leading foundation and is widely applied in the field of credit risk assessment and prediction. Representative of this trend, the study by Masmoudi et al. (2019) \cite{masmoudi2019credit} pioneered the structuring of a Bayesian network incorporating latent variables, opening up the possibility of exploiting risk characteristics that cannot be directly observed in order to improve credit appraisal performance comprehensively. From another angle, approaching the problem from the perspective of data quality, Leong (2016) \cite{leong2016credit} successfully addressed core intractable problems in real-world credit scoring systems, including data censorship, class distribution imbalance handled by the SMOTE algorithm \cite{chawla2002smote}, and the challenges of real-time implementation, through a specialised Bayesian network model.
+
+Alongside the explosion of data science and machine learning technology, the Bayesian network ecosystem has become ever more deeply embedded in the foundations of modern finance. For instance, Wu and Han (2021) \cite{wu2021novel} proposed a breakthrough inference model designed specifically for credit investigation systems based on fuzzy Bayesian networks, making a major contribution to handling ambiguous risk boundaries. To respond to the continuously fluctuating nature of the market, Lin et al. (2020) \cite{lin2020behavioral} developed an optimal Bayesian method for efficiently estimating multivariate risk measures within a dynamic framework, thereby considerably improving the accuracy of the operating system. Going further in exploiting the temporal dimension, Shin (2021) \cite{shin2021event} introduced an event-based Bayesian structure that allows variables to be modelled over different time intervals in order to assess the elasticity of financial standards and an institution's capacity to withstand risk.
+
+Not stopping at the boundary of credit risk, the comprehensiveness of the Bayesian network architecture has also demonstrated outstanding capability when extended to problems of portfolio risk management, project management and large-scale fraud detection. The study by Bai et al. (2020) \cite{bai2020project} made excellent use of fuzzy Bayesian networks to assess the risk of the resource system within a project portfolio, allowing key risk factors with cross-interdependency to be identified and systematic risk mitigation strategies to be proposed. Similarly, Akhavan et al. (2021) \cite{akhavan2021risk} built a specialised Bayesian network modelling framework to capture the risks of start-up and knowledge-based projects, providing a powerful logical tool for analysing multidimensional risk scenarios and quantifying their direct impact on overall success. It can be affirmed that Bayesian networks have established a firm foundation across the entire financial ecosystem, covering credit risk assessment, investment portfolio optimisation, market prediction and the detection of sophisticated financial fraud \cite{liu2024credit}. Notably, the resonance between modern computational capability and causal theory has laid the groundwork for Bayesian networks to penetrate deeply into other key scientific fields. This methodological framework has featured strongly in transportation systems for predicting the risk of flight delays (Truong, 2021) \cite{truong2021causal}, in medical diagnosis through variational Bayesian networks supporting biomedical image segmentation (Chen, Zhao, \& Liu, 2022) \cite{chen2022medical}, as well as in maritime safety risk assessment with fuzzy Bayesian networks (Chen, Zhang, et al., 2022) \cite{chen2022marine} and in socio-technical risk control processes at industrial megaprojects (Zangeneh \& McCabe, 2022) \cite{zangeneh2022modelling}.
+
+In order to realise causal interpretability explicitly and to quantify precisely the influence of each input feature, sensitivity analysis is integrated into the Bayesian network as a core post-hoc inference tool. This method is used specifically to probe and measure the sensitivity of a target node (such as the probability of default) to variation in the satellite nodes (such as income or debt ratio) within the network system. The mechanism of sensitivity analysis operates mainly on the control variable method; accordingly, the analyst actively intervenes to pin or alter the state of a cause node in order to observe directly the fluctuation in the posterior probability distribution of the effect nodes \cite{liu2024credit}, \cite{kamal2021sensitivity}. This technique quantifies precisely how adjustments to the input data of the Bayesian network will amplify or cancel out the magnitude of risk at the output. The larger the change in probability (the delta), the more sensitive the node under examination, demonstrating mathematically that the intrinsic causal link between the observed node and the varied node is extremely tight and dominant (Kamal \& Kutay, 2021) \cite{kamal2021sensitivity}. Successfully locating nodes of high sensitivity not only opens up the algorithmic black box but also provides a solid basis for the decision-making process, ensuring that the system operates safely and stably and laying the groundwork for planning purposeful risk interventions \cite{bueff2022counterfactual}.
+
+In Bayesian network research practice, the control variable method continues to assert its position as the backbone. Typically, the study by Chen, Zhang et al. (2022) \cite{chen2022marine} constructed an evidence-based fuzzy Bayesian network to model the probability of maritime accidents, while using sensitivity analysis to isolate in full the core factors governing the occurrence of accidents. Continuing along this line of approach, Kaptan (2022) \cite{kaptan2022analysis} flexibly employed Bayesian networks combined with sensitivity analysis to explore the risks in the process of loading vehicles onto RO-RO ships, demonstrating the versatility of this tool. Not stopping at the traditional control variable method, the constructive basis of sensitivity analysis has become increasingly diversified with the application of beta regression methods to measure the sensitivity of distribution parameters (Rohmer \& Gehl, 2020) \cite{rohmer2020sensitivity}, or the fusion of principal component analysis (PCA) to handle dynamic data spaces (Zhao et al., 2023) \cite{zhao2023mechanism}. Overall, the results obtained from Bayesian network sensitivity analysis go far beyond the limits of statistical figures; they have become the ultimate logical tool for explaining mechanisms, making structures transparent and vouching for every prediction of a causal machine learning model in the face of the most demanding requirements of science and of financial law \cite{european2016gdpr}, \cite{liu2024credit}, \cite{scholkopf2021causal}, \cite{peters2017elements}.
+
+
+

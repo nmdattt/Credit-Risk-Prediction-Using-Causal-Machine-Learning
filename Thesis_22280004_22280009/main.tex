@@ -1,0 +1,479 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{vietnam}
+
+% \AtBeginDocument{
+% \fontsize{13pt}{19.5pt}\selectfont
+% }
+
+\setlength{\parindent}{0pt}
+\usepackage{graphicx} 
+\usepackage{array}
+\usepackage{amsfonts}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{etoolbox}
+\usepackage{url}
+
+\usepackage[acronym]{glossaries}
+\makeglossaries
+
+\usepackage{algorithm}
+% \usepackage{algorithmic}
+\usepackage{algpseudocode}
+\usepackage{amsbsy}            
+\usepackage{amsthm}                
+\usepackage{minted}
+
+% ===================================================================
+% THÊM VÀO PREAMBLE (sau \usepackage{array}, trước \begin{document})
+% Cần thêm package xstring (chưa có trong preamble gốc của mày)
+% ===================================================================
+\usepackage{xstring}
+ 
+\makeatletter
+% Cột Mô tả: căn trái, cho phép ngắt dòng tự do (số liệu khoảng giá trị)
+\newcolumntype{D}[1]{>{\raggedright\arraybackslash\sloppy\hyphenpenalty=10000\exhyphenpenalty=10000}p{#1}}
+% Cột States: width cố định, căn trái, wrap khi list số dài
+\newcolumntype{S}[1]{>{\raggedright\arraybackslash\sloppy}p{#1}}
+% Cột Tên biến: width cố định, font mono, cho phép ngắt dòng
+\newcolumntype{V}[1]{>{\ttfamily\raggedright\arraybackslash\sloppy\hyphenpenalty=10000}p{#1}}
+\makeatother
+ 
+\AtBeginEnvironment{tabular}{\sloppy}
+\AtBeginEnvironment{longtable}{\sloppy}
+\setlength{\tabcolsep}{4pt}
+ 
+% Lệnh thay thế cho \texttt{...} trong cột tên biến: tự động cho phép
+% xuống dòng tại các dấu gạch dưới, để tên biến dài (vd is_foreign_worker)
+% không bị tràn / đè lên cột kế bên.
+\newcommand{\varname}[1]{%
+  \begingroup\ttfamily
+  \StrSubstitute{#1}{_}{\_\allowbreak}[\temp]%
+  \temp
+  \endgroup
+}
+
+\usepackage{rotating}
+\usepackage{booktabs}
+\usepackage{bm}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{tikz} 
+\usepackage{scrextend}
+\usepackage{longtable}
+\usepackage{adjustbox}
+\usepackage{tcolorbox}
+\usepackage{colortbl}
+
+\usepackage{ragged2e}   % Để căn lề trái văn bản trong cột mô tả
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue]{hyperref}
+
+\hypersetup{
+  citecolor=blue   % ← đổi màu [1] tại đây
+}
+\usepackage[numbers,sort&compress]{natbib}
+
+\usepackage{makecell}            % Cho phép xuống dòng tiêu đề ô
+\usepackage[table]{xcolor} 
+\usepackage[justification=centering]{caption}
+\usepackage{enumitem}
+
+% Tùy chỉnh lề trang
+% \usepackage[a4paper, top=3cm, bottom=3.5cm, left=3.5cm, right=2cm]{geometry}
+
+\usepackage[
+    a4paper,
+    twoside,
+    top=3cm,
+    bottom=3.5cm,
+    inner=3.5cm,
+    outer=2cm
+]{geometry}
+
+
+\usepackage{listings}
+\usepackage{subcaption}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  stringstyle=\color{orange},
+  numbers=left,
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=8pt,
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  captionpos=b,
+  tabsize=4
+}
+\usetikzlibrary{calc}
+
+%section
+\usepackage{titlesec}
+\usepackage{tabularx}
+
+\titleformat{\section}
+  {\bfseries\Huge\raggedright\linespread{0.9}\selectfont} % Định dạng font: Đậm, Rất lớn, Căn trái
+  {\mbox{}\\[2cm] Chương \thesection}         % Nhãn: Chương + số thứ tự
+  {0pt}                        % Khoảng cách giữa nhãn và tiêu đề (để 0 vì ta dùng newline)
+  {\\[1cm]}                  % Lệnh thực hiện trước tiêu đề: Xuống dòng và cách 0.5cm
+
+\titlespacing*{\section}
+  {0pt}                        % Khoảng cách lề trái: 0
+  {0pt}                        % Khoảng cách phía trên tiêu đề
+  {1cm}                        % Khoảng cách phía dưới tiêu đề (với nội dung văn bản)
+
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  %\usepackage[T1]{fontenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\renewcommand{\baselinestretch}{1.25}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{0.5em}
+    }
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+%\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{amsmath}
+\numberwithin{equation}{section}
+
+\usepackage{setspace}
+\ifLuaTeX
+\usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+
+
+
+\usepackage{multirow}
+\usepackage{placeins}
+
+\setlength{\parindent}{0.7cm} % Thiết lập độ thụt lề là 1cm (có thể đổi thành 1.25cm tùy ý)
+
+\numberwithin{table}{section}
+\numberwithin{figure}{section}
+
+\begin{document}
+
+\begin{titlepage}%
+
+\begin{tikzpicture}[remember picture,overlay,inner sep=0pt,outer sep=0pt]
+
+%================= Khung ngoài =================
+\draw[
+    blue!70!black,
+    line width=4pt
+]
+([xshift=-1.5cm,yshift=-2.5cm]current page.north east) coordinate (A)
+--
+([xshift=3cm,yshift=-2.5cm]current page.north west) coordinate (B)
+--
+([xshift=3cm,yshift=2.5cm]current page.south west) coordinate (C)
+--
+([xshift=-1.5cm,yshift=2.5cm]current page.south east) coordinate (D)
+-- cycle;
+
+%================= Hoa văn góc (giữ nguyên) =================
+\draw
+([yshift=0.5cm,xshift=-0.5cm]A) --
+([yshift=0.5cm,xshift=0.5cm]B) --
+([yshift=-0.5cm,xshift=0.5cm]B) --
+([yshift=-0.5cm,xshift=-0.5cm]B) --
+([yshift=0.5cm,xshift=-0.5cm]C) --
+([yshift=0.5cm,xshift=0.5cm]C) --
+([yshift=-0.5cm,xshift=0.5cm]C) --
+([yshift=-0.5cm,xshift=-0.5cm]D) --
+([yshift=0.5cm,xshift=-0.5cm]D) --
+([yshift=0.5cm,xshift=0.5cm]D) --
+([yshift=-0.5cm,xshift=0.5cm]A) --
+([yshift=-0.5cm,xshift=-0.5cm]A) --
+([yshift=0.5cm,xshift=-0.5cm]A);
+
+%================= Hoa văn trong (giữ nguyên) =================
+\draw
+([yshift=-0.3cm,xshift=0.3cm]A) --
+([yshift=-0.3cm,xshift=-0.3cm]B) --
+([yshift=0.3cm,xshift=-0.3cm]B) --
+([yshift=0.3cm,xshift=0.3cm]B) --
+([yshift=-0.3cm,xshift=0.3cm]C) --
+([yshift=-0.3cm,xshift=-0.3cm]C) --
+([yshift=0.3cm,xshift=-0.3cm]C) --
+([yshift=0.3cm,xshift=0.3cm]D) --
+([yshift=-0.3cm,xshift=0.3cm]D) --
+([yshift=-0.3cm,xshift=-0.3cm]D) --
+([yshift=0.3cm,xshift=-0.3cm]A) --
+([yshift=0.3cm,xshift=0.3cm]A) --
+([yshift=-0.3cm,xshift=0.3cm]A);
+
+\end{tikzpicture}
+
+\vspace*{-0.7cm}
+
+
+ \thispagestyle{empty}
+    \enlargethispage{20cm}  % just to make sure LaTeX doesn't
+                            % generate a new page
+ 
+    \noindent
+    \begin{center}
+    	{\bf  VIETNAM NATIONAL UNIVERSITY, HO CHI MINH CITY}\\
+    	{\bf UNIVERSITY OF SCIENCE}\\
+    \end{center}
+    
+    \begin{center}
+      \centering
+      \includegraphics[width = 0.3\textwidth]{image/logo.png}
+    \end{center}
+
+\vspace{0.5cm}
+
+\begin{center}
+
+    \fontsize{14pt}{14pt}\selectfont 
+    \textbf{BACHELOR'S THESIS} \\
+    \vspace{10pt}
+    \fontsize{17pt}{17pt}\selectfont
+    \textbf{CAUSAL MACHINE LEARNING AND ITS APPLICATION IN CREDIT RISK PREDICTION}
+    
+    \vspace{10pt}
+    \fontsize{13pt}{13pt}\selectfont 
+    FACULTY OF MATHEMATICS AND COMPUTER SCIENCE \\
+    \fontsize{13pt}{13pt}\selectfont 
+    MAJOR: DATA SCIENCE \\
+\end{center}
+\vspace{10pt}
+\fontsize{13pt}{13pt}\selectfont
+
+\begin{tabbing}
+\hspace{4cm} \= \hspace{5cm} \= \kill
+\hspace{3.5cm}\= \textbf{Students:}\\[0.3cm]
+\hspace{4cm}\= Truong Binh Ba  \> Student ID: 22280004 \\[0.2cm]
+\hspace{4cm}\= Nguyen Minh Dat \> Student ID: 22280009 \\
+
+\end{tabbing}
+
+\begin{center} 
+\hspace{0cm} \textbf{Supervisor:} Dr. To Duc Khanh
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[remember picture,overlay]
+\node[
+    anchor=south,
+    font=\large
+] at ($(current page.south)+(0.75cm,3cm)$)
+{Ho Chi Minh City, July 4th, 2026};
+\end{tikzpicture}
+\end{center}
+
+\end{titlepage}
+
+
+\clearpage
+\thispagestyle{empty}
+\mbox{}
+\clearpage
+
+\pagenumbering{roman}
+%%% Lời cảm ơn
+
+
+\addcontentsline{toc}{section}{Acknowledgements}
+\input{project/1_camon}
+\baselineskip = 15pt
+\setlength{\headheight}{15pt}
+\clearpage
+\mbox{}    % Tạo một nội dung rỗng để LaTeX không bỏ qua trang này
+\clearpage % Sang trang tiếp theo
+
+%%% Tóm tắt
+    
+\input{project/2_tomtat}
+\addcontentsline{toc}{section}{Abstract}
+\setlength{\parskip}{6pt}
+\baselineskip = 15pt
+\setlength{\headheight}{15pt}
+\clearpage % Đảm bảo ngắt trang giữa các mục
+
+
+\mbox{}    % Tạo một nội dung rỗng để LaTeX không bỏ qua trang này
+\clearpage % Sang trang tiếp theo
+
+
+
+%% ===== MỤC LỤC =====
+\tableofcontents
+\addcontentsline{toc}{section}{Mục lục}
+\clearpage
+
+%% ===== DANH SÁCH BẢNG =====
+\listoftables
+\phantomsection
+\addcontentsline{toc}{section}{List of tables} % Thêm dòng này để hiện tên mục này trong Mục lục
+\clearpage
+
+%% ===== DANH SÁCH HÌNH VẼ =====
+\listoffigures
+\phantomsection
+\addcontentsline{toc}{section}{List of figures} %% Thêm dòng để hiện tên mục này trong Mục lục
+\clearpage
+
+%% ===== DANH SÁCH KÝ HIỆU / VIẾT TẮT =====
+%% Thường phần này bạn sẽ tự tạo bằng môi trường bảng hoặc dùng gói 'nomencl'
+\section*{Lists of symbols}
+\phantomsection
+\addcontentsline{toc}{section}{Lists of symbols}
+\input{project/ky_hieu} 
+\clearpage
+
+%% phan trang bia, loi cam on, muc luc, muc luc bang, hinh anh, ...
+
+%%%%%%%%%%%% số trang
+
+%%%%%%%%%%%% CẤU HÌNH HEADER / FOOTER
+\pagestyle{fancy}
+
+% Định nghĩa lại section và subsection cho lớp article
+\renewcommand{\sectionmark}[1]{\markboth{\thesection.\ #1}{\thesection.\ #1}}
+\renewcommand{\subsectionmark}[1]{\markright{\thesubsection\quad #1}}
+
+\fancyhf{}
+
+% Cài đặt vị trí hiển thị (LE: Left Even, RO: Right Odd, v.v.)
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO,RE]{\textit{\nouppercase{\rightmark}}}
+
+% Định dạng cho trang plain (thường là trang đầu section/tiêu đề)
+\fancypagestyle{plain}{
+  \fancyhf{} 
+  \renewcommand{\headrulewidth}{0pt} 
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+
+\preto\section{
+  \clearpage
+  \thispagestyle{plain}
+}
+
+
+
+% ===== CÁC CHƯƠNG =====
+\pagenumbering{arabic}
+\input{project/3_Gioithieu_detai}
+%\input{project/4_Muctieu}
+\input{project/4_Cosolythuyet}
+\input{project/5_Phuongphap_nghiencuu}
+\input{project/6_Thucnghiem}
+%\input{project/8_}
+\input{project/9_Tongket}
+\input{project/10_Ketluan}
+\input{project/11_Insight}
+
+\newpage
+
+%% Phan trang sau cua luan van
+\setlength{\parskip}{6pt}
+\baselineskip = 15pt
+\setlength{\headheight}{15pt}
+
+
+%%%% References
+
+\renewcommand{\refname}{Tài liệu tham khảo}
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{references}
+\addcontentsline{toc}{section}{Tài liệu tham khảo}
+\clearpage
+
+% %% Phụ lục
+% \section*{Phụ lục}
+% \phantomsection
+% \addcontentsline{toc}{section}{Phụ lục}
+% \input{project/12_Phuluc}
+
+\end{document}
+

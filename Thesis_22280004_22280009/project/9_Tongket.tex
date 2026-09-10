@@ -1,0 +1,41 @@
+\section{Tổng kết}
+
+\subsection{Kết quả của khóa luận}
+
+\noindent
+Kết quả thực nghiệm trên ba bộ dữ liệu khẳng định mô hình BN\_Pro kết hợp học cấu trúc bằng BIC-Tabu Search với ràng buộc tri thức chuyên gia, học tham số bằng MLE, suy diễn chính xác bằng VE, và bộ công cụ diễn giải đầy đủ (sensitivity, forward/backward inference, Individual Analysis, what-if) không chỉ cạnh tranh được về độ chính xác dự báo với các mô hình học máy hiện đại trên các bộ dữ liệu quy mô vừa và nhỏ (vượt trội tuyệt đối trên Australian Credit), mà còn cung cấp khả năng diễn giải nhân quả tường minh mà các mô hình khép kín như XGBoost hay Stacking Ensemble không có sẵn.
+
+Hiệu năng dự báo của BN biến thiên mạnh theo quy mô và độ phức tạp dữ liệu: ROC-AUC tăng từ 0.6910 (Lending Club, 27 biến) lên 0.7667 (German Credit, 15 biến) và đạt đỉnh 0.9220 (Australian Credit, 8 biến), có xu hướng ngược chiều với số lượng đặc trưng đầu vào.
+
+
+So với các mô hình học máy hiện đại, BN không phải lúc nào cũng là lựa chọn tối ưu về độ chính xác thuần túy: trên dữ liệu lớn nhiều chiều, các mô hình tổ hợp cây (XGBoost, Random Forest) vượt trội hơn; trên dữ liệu nhỏ, ít chiều, BN có thể vượt qua toàn bộ các mô hình đối chứng kể cả Stacking Ensemble.
+
+
+Phân tích DCA xác nhận BN mang lại lợi ích ròng dương và vượt trội hơn các chiến lược biên (Treat All / Treat None) trong vùng ngưỡng xác suất hợp lý trên cả ba bộ dữ liệu, khẳng định giá trị ứng dụng thực tiễn dù chỉ số AUC tuyệt đối có thể thấp hơn các mô hình đối chứng ở một số trường hợp.
+
+Ưu thế nổi bật và khác biệt của BN so với các mô hình đối chứng là khả năng diễn giải tường minh thông qua cấu trúc đồ thị nhân quả và phân tích độ nhạy xác suất hậu nghiệm — một năng lực mà các mô hình khép kín (Random Forest, XGBoost, mạng nơ-ron) không có sẵn, đòi hỏi phải bổ sung các công cụ diễn giải hậu kỳ riêng biệt (như SHAP, LIME).
+
+
+Quá trình tối ưu hóa cấu trúc bằng Tabu Search với 50 lần chạy độc lập cho thấy độ ổn định nghịch biến với số lượng biến: bộ dữ liệu càng nhỏ, không gian cấu trúc càng hẹp, kết quả hội tụ giữa các lần chạy càng nhất quán.
+
+
+\subsection{Hạn chế và hướng phát triển}
+Hạn chế lớn nhất quan sát được đối với mô hình BN trên bộ dữ liệu quy mô lớn (Lending Club) là khoảng cách hiệu năng giữa train và test (0.7944 so với 0.6910), phản ánh rủi ro overfitting cấu trúc khi số lượng biến và số cạnh đồ thị tăng cao. Việc rời rạc hóa biến liên tục bằng K-means cũng là một nguồn mất thông tin tiềm tàng, đặc biệt ảnh hưởng đến các biến tài chính có phân phối liên tục đa dạng như annual\_inc, dti, revol\_util. 
+
+Kết quả trên Lending Club cũng bộc lộ giới hạn về khả năng mở rộng (scalability) của suy diễn chính xác khi số đặc trưng và độ phức tạp cấu trúc DAG tăng cao, cũng như hiện tượng CPT thưa dẫn tới xác suất cực đoan khi suy luận tiến chỉ dựa trên evidence hẹp. Đây là cơ sở thực nghiệm để đề xuất các hướng cải tiến: giới hạn chặt hơn max\_indegree, áp dụng suy diễn xấp xỉ (approximate inference) thay cho khử biến trên các bộ dữ liệu quy mô lớn, hoặc khai thác BN như thành phần diễn giải bên trong kiến trúc các mô hình kết hợp thay vì một mô hình dự báo độc lập hoàn toàn.
+
+
+Hướng phát triển trong tương lai bao gồm: (i) áp dụng các kỹ thuật regularization mạnh hơn trong bước học cấu trúc (ví dụ giảm max\_indegree hoặc áp đặt expert\_knowledge/forbidden\_edges chặt chẽ hơn); (ii) thử nghiệm các phương pháp rời rạc hóa thích nghi (adaptive binning) thay cho K-means cố định; (iii) mở rộng so sánh với các biến thể Mạng Bayes liên tục (Gaussian Bayesian Network, Hybrid BN) để giảm thiểu mất mát thông tin do rời rạc hóa, đặc biệt phù hợp với các bộ dữ liệu quy mô lớn như Lending Club.
+
+\subsection{Kết luận}
+\noindent
+Nghiên cứu xuất phát từ một câu hỏi thực tiễn có tính cấp thiết cao trong lĩnh vực tài chính ngân hàng hiện đại: liệu có thể xây dựng một mô hình dự báo rủi ro tín dụng vừa đạt hiệu năng phân loại cạnh tranh, vừa cung cấp giải thích nhân quả có chiều sâu đủ để phục vụ thực tiễn thẩm định và quản lý rủi ro thay vì phải chọn một trong hai? Câu trả lời mà nghiên cứu này đưa ra được kiểm chứng bởi bằng chứng thực nghiệm trên ba bộ dữ liệu độc lập là có, nhưng có điều kiện. Điều kiện đó là chất lượng toàn bộ pipeline chuẩn bị dữ liệu trước khi đưa vào mô hình sinh: lọc đặc trưng phù hợp, kiểm soát rò rỉ thông tin, và chiến lược rời rạc hóa tương thích với phân phối từng biến.
+
+
+Bằng chứng cho luận điểm này được rút ra trực tiếp từ kết quả thực nghiệm. Trên bộ Australian Credit với pipeline chuẩn bị dữ liệu đạt chất lượng đồng đều nhất với chỉ 8 đặc trưng đã được lọc kỹ và rời rạc hóa nhất quán, BN đạt AUC-ROC 0.9220 trên tập test, xếp hạng 1/6, vượt qua cả Stacking Ensemble (0.9035), Logistic Regression (0.9052), Random Forest (0.9046), XGBoost (0.8919) lẫn KNN (0.8415). Đáng chú ý hơn, BN đạt điều này với khoảng cách overfitting thấp nhất trong nhóm: AUC train là 0.9278, tức khoảng cách train–test chỉ 0.0058, trong khi XGBoost là 0.0852 (train 0.9771 so với test 0.8919), KNN lên tới 0.1555 (train 0.9970 so với test 0.8415), và ngay cả Stacking Ensemble cũng có khoảng cách 0.0570 (train 0.9605 so với test 0.9035). Điều này cho thấy BN khi được cấp dữ liệu đầu vào phù hợp với giả định rời rạc của nó, không thua kém các mô hình ensemble về AUC và vượt trội đáng kể về độ ổn định tổng quát hóa (generalization stability), một đặc tính then chốt trong bối cảnh triển khai thực tiễn tín dụng nơi phân phối dữ liệu luôn dịch chuyển theo thời gian.
+
+
+Đóng góp cốt lõi vượt ra ngoài con số AUC là khung suy luận bốn chiều In\_Pro, mang lại loại giá trị mà không mô hình phân biệt nào có thể cung cấp từ cùng một mô hình duy nhất: định lượng độ nhạy từng biến trong Markov Blanket, trả lời câu hỏi chẩn đoán ngược về đặc điểm của khách hàng đã vỡ nợ, giải thích xác suất vỡ nợ ở cấp độ từng hồ sơ cụ thể, và định lượng tác động can thiệp khi thay đổi từng yếu tố rủi ro. Ba phép phân tích độc lập sensitivity, likelihood ratio, và individual contribution hội tụ nhất quán về cùng tập biến chi phối rủi ro, xác nhận cấu trúc đồ thị học được phản ánh đúng các quan hệ phụ thuộc có ý nghĩa miền thực sự trong từng bối cảnh tín dụng.
+
+Giới hạn thực sự của mô hình sinh không phải là về hiệu năng phân loại khi dữ liệu và pipeline phù hợp, mà là về khả năng mở rộng sang không gian đặc trưng lớn và dữ liệu phi cấu trúc. Trên Lending Club với 27 đặc trưng, BN đạt AUC = 0.6910. Đây không phải thất bại trong nghiên cứu mà là kết quả hợp lý của một mô hình sinh buộc phải rời rạc hóa toàn bộ không gian đặc trưng liên tục và học cấu trúc phụ thuộc từ dữ liệu có nhiều quan hệ phi tuyến cục bộ, vốn là điều kiện để các mô hình phân biệt dựa trên cây quyết định xử lý hiệu quả hơn về mặt bản chất. Sự đánh đổi này không phủ nhận giá trị của BN, mà làm rõ vùng ứng dụng phù hợp: BN phát huy lợi thế tối đa trong bối cảnh không gian đặc trưng vừa phải, cấu trúc phụ thuộc tương đối rõ ràng, và yêu cầu giải thích nhân quả là ưu tiên hàng đầu, đây chính xác là bối cảnh của phần lớn bài toán thẩm định tín dụng thực tiễn tại các tổ chức tín dụng quy mô vừa và nhỏ.
+
