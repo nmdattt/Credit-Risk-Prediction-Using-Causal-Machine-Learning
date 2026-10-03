@@ -1,0 +1,14 @@
+numpy
+pandas
+scipy
+scikit-learn
+imbalanced-learn
+statsmodels
+xgboost
+pgmpy>=1.0.0
+networkx
+shap
+lime
+matplotlib
+seaborn
+jupyter
