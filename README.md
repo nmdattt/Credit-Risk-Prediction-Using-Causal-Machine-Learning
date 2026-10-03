@@ -22,8 +22,8 @@ The thesis also covers decision threshold optimisation and Decision Curve Analys
 
 | Dataset | Source | Samples used | Features | Default rate |
 |---------|--------|--------------|----------|--------------|
-| Australian Credit Approval | [UCI](https://archive.ics.uci.edu/dataset/143/statlog+australian+credit+approval) | 690 | 14 | 55.5% |
-| German Credit | [UCI](https://archive.ics.uci.edu/dataset/144/statlog+german+credit+data) | 1,000 | 20 | 30% |
+| Australian Credit Approval | Australian Credit (included in this repo via Git LFS) | 690 | 14 | 55.5% |
+| German Credit | German Credit (included in this repo via Git LFS) | 1,000 | 20 | 30% |
 | Lending Club 2007-2014 | Lending Club public loan data (included in this repo via Git LFS) | 30,000 (subsampled from 466,345) | 46 | 30% |
 
 Each dataset is split 60/40 into training and test sets. Lending Club was subsampled (21,000 non-default and 9,000 default loans) to keep Bayesian network structure learning tractable.
