@@ -1,0 +1,12 @@
+﻿__pycache__/
+.ipynb_checkpoints/
+venv/
+.env
+.DS_Store
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.bbl
+*.blg
